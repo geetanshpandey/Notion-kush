@@ -92,7 +92,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           />
         ) : null} {/* No title or button displayed when not editing */}
       </div>
-      <div className="flex gap-2 items-center"> {/* Center the buttons vertically */}
+      <div className="flex gap-2 items-center mr-16"> {/* Center the buttons vertically */}
         {!initialData.icon && !preview && (
           <div className="mb-4">
             <IconPicker asChild onChange={onIconSelect}>

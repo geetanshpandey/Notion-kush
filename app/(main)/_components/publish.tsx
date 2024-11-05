@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
@@ -72,7 +70,11 @@ export const Publish = ({ initialData }: PublishProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="ghost">
+        <Button
+          size="sm"
+          variant="ghost"
+          className="bg-black text-white dark:bg-white dark:text-black" // Adjusted button color
+        >
           <div>Publish</div>
           {initialData.isPublished && (
             <Globe className="text-sky-500 w-4 h-4 ml-2" />

@@ -28,13 +28,14 @@ const DocumentsPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start h-screen">
-      {/* Welcome message and button aligned in a row */}
-      <div className="flex items-center justify-between w-full max-w-4xl px-4 -mt-4">
-        <h2 className="-ml-20">
+    <div className="flex flex-col items-center justify-start h-screen p-4 sm:p-6 lg:p-8">
+      {/* Welcome message and button aligned in a column on mobile */}
+      <div className="flex flex-col items-start justify-between w-full max-w-4xl px-4 -mt-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="-ml-10 text-lg sm:text-xl md:text-2xl">
           Welcome to <span className="font-bold">{user?.firstName}&apos;s</span> Notion
         </h2>
-        <Button onClick={onCreate} className="ml-auto -mr-20">
+        {/* Button below welcome message in mobile mode */}
+        <Button onClick={onCreate} className="mt-4 sm:mt-0 sm:ml-auto -mr-20">
           <PlusCircle className="h-4 w-4 mr-2" />
           Create a note
         </Button>
@@ -57,8 +58,8 @@ const DocumentsPage = () => {
         <p className="max-w-[90%] mx-auto text-gray-600 dark:text-gray-400">
           ✏️ With Notion, you have the ultimate canvas to visualize your plans—don’t just dream it, document it!
         </p>
-        
       </div>
+
       <div className="mt-16 space-y-4 text-center w-full max-w-4xl px-4">
         <p className="max-w-[90%] mx-auto text-gray-600 dark:text-gray-400 -mb-2">
           Get started by
@@ -70,9 +71,9 @@ const DocumentsPage = () => {
             <PlusCircle className="h-4 w-4 mr-2" />
             Creating a note
           </Button>
-          
+
           {/* Adding styled Notion text below the button */}
-          <p className="text-gray-600 dark:text-gray-950 mt-14 text-1xl font-semibold">
+          <p className="text-gray-600 dark:text-gray-950 mt-14 text-xl font-semibold">
             Notion
           </p>
         </div>

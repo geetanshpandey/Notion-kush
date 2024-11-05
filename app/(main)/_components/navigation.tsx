@@ -28,6 +28,11 @@ import { Item } from "./item";
 import { DocumentList } from "./document-list";
 import { TrashBox } from "./trash-box";
 import { Navbar } from "./navbar";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 // NO CSS
 
@@ -133,64 +138,76 @@ export const Navigation = () => {
   return (
     <>
       <aside
-        ref={sidebarRef}
-        className={cn(
-          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
-          isResetting && "transition-all ease-in-out duration-300",
-          isMobile && "w-0"
-        )}
-      >
-        <div
-          onClick={collapse}
-          role="button"
-          className={cn(
-            "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
-            isMobile && "opacity-100"
-          )}
-        >
-          <ChevronsLeft className="h-6 w-6" />
-        </div>
-        <div>
-          <UserItem />
-          <Item label="Home" icon={HomeIcon} onClick={() => router.push("/documents")} />
-          <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
-          <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
-          <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
-          <Item label="Favourite" icon={Star} onClick={() => router.push("/documents")} />
-        </div>
-        <div className="mt-4">
-          <DocumentList />
-          <Item onClick={handleCreate} icon={Plus} label="Add a page" />
-          <div className="mt-4"></div>
-          <Item icon={Trash} label="Trash" />
-          <Item icon={Calendar} label="Calendar" />
-          {/* Help Item */}
-          <Item label="Help" icon={HelpCircle} onClick={handleHelpClick} />
-          {isHelpOpen && (
-            <div className="absolute bg-white dark:bg-black border border-gray-300 dark:border-gray-600 p-4 rounded mt-2 shadow-lg w-50 z-50 ml-6"> {/* Help Dropdown */}
-              <h2 className="font-semibold text-black dark:text-white">How can I help you?</h2>
-              <button onClick={handleHelpClick} className="mt-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded text-sm">
-                Close
-              </button>
-            </div>
-          )}
-          <Item icon={LogOut} label="Exit Notion" />
-          <div className="mt-44 flex flex-col items-center">
-            <div className="-mb-2 text-xs text-center mr-2">Notion by</div>
-            <Image
-              src="/image/logo.png" // Path to the logo image
-              alt="Logo"
-              width={150} // Set appropriate width
-              height={150} // Set appropriate height
-            />
+      ref={sidebarRef}
+      className={cn(
+        "group/sidebar h-full bg-secondary overflow-y-hidden relative flex flex-col z-[99999] transition-all ease-in-out duration-300",
+        isCollapsed ? "w-0" : "w-60", // Adjust width based on isCollapsed
+        isMobile && "w-0"
+      )}
+    >
+      {!isCollapsed && ( // Render only when not collapsed
+        <>
+          <div
+            onClick={collapse}
+            role="button"
+            className={cn(
+              "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-100",
+              isMobile && "opacity-100"
+            )}
+          >
+            <ChevronsLeft className="h-6 w-6" />
           </div>
-        </div>
-        <div
-          onMouseDown={handleMouseDown}
-          onClick={resetWidth}
-          className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0"
-        />
-      </aside>
+          <div>
+            <UserItem />
+            <Item label="Home" icon={HomeIcon} onClick={() => router.push("/documents")} />
+            <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
+            <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
+            <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
+            <Item label="Favourite" icon={Star} onClick={() => router.push("/documents")} />
+          </div>
+          <div className="mt-4">
+            <DocumentList />
+            <Item onClick={handleCreate} icon={Plus} label="Add a page" />
+            <Popover>
+              <PopoverTrigger className="w-full mt-4">
+                <Item label="Trash" icon={Trash} />
+              </PopoverTrigger>
+              <PopoverContent
+                className="p-0 w-72"
+                side={isMobile ? "bottom" : "right"}
+              >
+                <TrashBox />
+              </PopoverContent>
+            </Popover>
+            <Item icon={Calendar} label="Calendar" />
+            <Item label="Help" icon={HelpCircle} onClick={handleHelpClick} />
+            {isHelpOpen && (
+              <div className="absolute bg-white dark:bg-black border border-gray-300 dark:border-gray-600 p-4 rounded mt-2 shadow-lg w-50 z-50 ml-6"> {/* Help Dropdown */}
+                <h2 className="font-semibold text-black dark:text-white">How can I help you?</h2>
+                <button onClick={handleHelpClick} className="mt-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded text-sm">
+                  Close
+                </button>
+              </div>
+            )}
+            <Item icon={LogOut} label="Exit Notion" />
+            <div className="mt-36 flex flex-col items-center">
+              <div className="-mb-2 text-xs text-center mr-2">Notion by</div>
+              <Image
+                src="/image/logo.png" // Path to the logo image
+                alt="Logo"
+                width={150} // Set appropriate width
+                height={150} // Set appropriate height
+              />
+            </div>
+          </div>
+        </>
+      )}
+      <div
+        onMouseDown={handleMouseDown}
+        onClick={resetWidth}
+        className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full w-1 bg-primary/10 right-0 top-0"
+      />
+    </aside>
       <div
         ref={navbarRef}
         className={cn(
