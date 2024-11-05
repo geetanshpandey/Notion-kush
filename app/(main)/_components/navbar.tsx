@@ -26,7 +26,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
 
   if (document === undefined) {
     return (
-      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-between">
+      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-end fixed bottom-0 left-0 right-0">
         <Title.Skeleton />
         <div className="flex items-center gap-x-2">
           <Menu.Skeleton />
@@ -41,23 +41,33 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
 
   return (
     <>
-      <nav>
-        {isCollapsed && (
-          <MenuIcon
-            role="button"
-            onClick={onResetWidth}
-            className="h-6 w-6 text-muted-foreground"
-          />
-        )}
-        <div>
-          <Title initialData={document} />
-          <div className="flex items-center gap-x-2">
-            <Publish initialData={document} />
-            <Menu documentId={document._id} />
+      {/* Move this nav to the bottom right of the screen */}
+      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center justify-between">
+        {isCollapsed ? (
+          <div className="flex items-center flex-row-reverse gap-2">
+            <Title initialData={document} />
+            <MenuIcon
+              role="button"
+              onClick={onResetWidth}
+              className="h-6 w-6 text-muted-foreground"
+            />
           </div>
-        </div>
+        ) : (
+          <Title initialData={document} />
+        )}
       </nav>
+
+
+
+      {/* Centering Publish and Menu at the bottom of the screen */}
+      <div className="fixed bottom-4 left-[53%] flex items-center justify-center gap-x-2">
+        <Publish initialData={document} />
+        <Menu documentId={document._id} />
+      </div>
+      
+      {/* Displaying banner if the document is archived */}
       {document.isArchived && <Banner documentId={document._id} />}
     </>
   );
 };
+

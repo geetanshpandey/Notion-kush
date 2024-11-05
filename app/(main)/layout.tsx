@@ -13,7 +13,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center overflow-hidden">
         <Spinner size="lg" />
       </div>
     );
@@ -24,9 +24,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div>
-      <Navigation />
-      <main>
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar Navigation */}
+      <aside className="w-64 h-full">
+        <Navigation />
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 p-8 h-full overflow-auto">
         <SearchCommand />
         {children}
       </main>

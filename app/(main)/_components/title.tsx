@@ -19,7 +19,7 @@ export const Title = ({ initialData }: TitleProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const update = useMutation(api.documents.update);
 
-  const [title, setTitle] = useState(initialData.title || "Untitled");
+  const [title, setTitle] = useState(initialData.title || "untitled");
   const [isEditing, setIsEditing] = useState(false);
 
   const enableInput = () => {
@@ -39,7 +39,7 @@ export const Title = ({ initialData }: TitleProps) => {
     setTitle(event.target.value);
     update({
       id: initialData._id,
-      title: event.target.value || "Untitled",
+      title: event.target.value || "untitled",
     });
   };
 

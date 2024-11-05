@@ -24,7 +24,6 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
 
   const update = useMutation(api.documents.update);
   const removeIcon = useMutation(api.documents.removeIcon);
-
   const coverImage = useCoverImage();
 
   const enableInput = () => {
@@ -43,7 +42,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     setValue(value);
     update({
       id: initialData._id,
-      title: value || "Untitled",
+      title: value || "hello",
     });
   };
 
@@ -68,45 +67,51 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   };
 
   return (
-    <div>
-      {!!initialData.icon && !preview && (
-        <div>
-          <IconPicker onChange={onIconSelect}>
-            <p>{initialData.icon}</p>
-          </IconPicker>
-          <Button onClick={onRemoveIcon} variant="outline" size="icon">
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
-      {!!initialData.icon && preview && <p>{initialData.icon}</p>}
+    <div className="flex justify-between items-start -mt-8"> {/* Adjust alignment and margin */}
       <div>
+        {!!initialData.icon && !preview && (
+          <div className="flex items-center">
+            <IconPicker onChange={onIconSelect}>
+              <p>{initialData.icon}</p>
+            </IconPicker>
+            <Button onClick={onRemoveIcon} variant="outline" size="icon">
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+        {!!initialData.icon && preview && <p>{initialData.icon}</p>}
+        
+        {isEditing && !preview ? (
+          <TextareaAutosize
+            ref={inputRef}
+            onBlur={disableInput}
+            onKeyDown={onKeyDown}
+            value={value}
+            onChange={(e) => onInput(e.target.value)}
+            className="mt-2" // Adjust margin here
+          />
+        ) : null} {/* No title or button displayed when not editing */}
+      </div>
+      <div className="flex gap-2 items-center"> {/* Center the buttons vertically */}
         {!initialData.icon && !preview && (
-          <IconPicker asChild onChange={onIconSelect}>
+          <div className="mb-4">
+            <IconPicker asChild onChange={onIconSelect}>
             <Button variant="outline" size="sm">
               <Smile className="h-4 w-4 mr-2" />
               Add icon
             </Button>
           </IconPicker>
+          </div>
         )}
         {!initialData.coverImage && !preview && (
-          <Button onClick={coverImage.onOpen} variant="outline" size="sm">
+          <div className="mb-4">
+            <Button onClick={coverImage.onOpen} variant="outline" size="sm">
             <ImageIcon className="h-4 w-4 mr-2" />
             Add cover
           </Button>
+          </div>
         )}
       </div>
-      {isEditing && !preview ? (
-        <TextareaAutosize
-          ref={inputRef}
-          onBlur={disableInput}
-          onKeyDown={onKeyDown}
-          value={value}
-          onChange={(e) => onInput(e.target.value)}
-        />
-      ) : (
-        <div onClick={enableInput}>{initialData.title}</div>
-      )}
     </div>
   );
 };

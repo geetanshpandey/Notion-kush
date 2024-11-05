@@ -55,7 +55,7 @@ export const Publish = ({ initialData }: PublishProps) => {
 
     toast.promise(promise, {
       loading: "Unpublishing...",
-      success: "Note unpublished",
+      success: "Note Unpublished",
       error: "Failed to unpublish note.",
     });
   };
@@ -73,7 +73,7 @@ export const Publish = ({ initialData }: PublishProps) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button size="sm" variant="ghost">
-          Publish
+          <div>Publish</div>
           {initialData.isPublished && (
             <Globe className="text-sky-500 w-4 h-4 ml-2" />
           )}

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import {
   ChevronsLeft,
   MenuIcon,
@@ -8,23 +8,21 @@ import {
   Search,
   Settings,
   Trash,
+  HomeIcon,
+  Star,
+  HelpCircle,
+  Calendar,
+  LogOut,
 } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
-
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 import { useSearch } from "@/hooks/use-search";
 import { useSettings } from "@/hooks/use-settings";
-
 import { UserItem } from "./user-item";
 import { Item } from "./item";
 import { DocumentList } from "./document-list";
@@ -47,6 +45,7 @@ export const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const [isHelpOpen, setIsHelpOpen] = useState(false); // State for help dropdown
 
   useEffect(() => {
     if (isMobile) {
@@ -62,9 +61,7 @@ export const Navigation = () => {
     }
   }, [pathname, isMobile]);
 
-  const handleMouseDown = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -83,10 +80,7 @@ export const Navigation = () => {
     if (sidebarRef.current && navbarRef.current) {
       sidebarRef.current.style.width = `${newWidth}px`;
       navbarRef.current.style.setProperty("left", `${newWidth}px`);
-      navbarRef.current.style.setProperty(
-        "width",
-        `calc(100% - ${newWidth}px)`
-      );
+      navbarRef.current.style.setProperty("width", `calc(100% - ${newWidth}px)`);
     }
   };
 
@@ -102,10 +96,7 @@ export const Navigation = () => {
       setIsResetting(true);
 
       sidebarRef.current.style.width = isMobile ? "100%" : "240px";
-      navbarRef.current.style.setProperty(
-        "width",
-        isMobile ? "0" : "calc(100% - 240px)"
-      );
+      navbarRef.current.style.setProperty("width", isMobile ? "0" : "calc(100% - 240px)");
       navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
       setTimeout(() => setIsResetting(false), 300);
     }
@@ -124,7 +115,7 @@ export const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" }).then((documentId) =>
+    const promise = create({ title: "untitled" }).then((documentId) =>
       router.push(`/documents/${documentId}`)
     );
 
@@ -133,6 +124,10 @@ export const Navigation = () => {
       success: "New note created!",
       error: "Failed to create a new note.",
     });
+  };
+
+  const handleHelpClick = () => {
+    setIsHelpOpen((prev) => !prev); // Toggle the help dropdown visibility
   };
 
   return (
@@ -157,24 +152,38 @@ export const Navigation = () => {
         </div>
         <div>
           <UserItem />
+          <Item label="Home" icon={HomeIcon} onClick={() => router.push("/documents")} />
           <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
           <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
+          <Item label="Favourite" icon={Star} onClick={() => router.push("/documents")} />
         </div>
         <div className="mt-4">
           <DocumentList />
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
-          <Popover>
-            <PopoverTrigger className="w-full mt-4">
-              <Item label="Trash" icon={Trash} />
-            </PopoverTrigger>
-            <PopoverContent
-              className="p-0 w-72"
-              side={isMobile ? "bottom" : "right"}
-            >
-              <TrashBox />
-            </PopoverContent>
-          </Popover>
+          <div className="mt-4"></div>
+          <Item icon={Trash} label="Trash" />
+          <Item icon={Calendar} label="Calendar" />
+          {/* Help Item */}
+          <Item label="Help" icon={HelpCircle} onClick={handleHelpClick} />
+          {isHelpOpen && (
+            <div className="absolute bg-white dark:bg-black border border-gray-300 dark:border-gray-600 p-4 rounded mt-2 shadow-lg w-50 z-50 ml-6"> {/* Help Dropdown */}
+              <h2 className="font-semibold text-black dark:text-white">How can I help you?</h2>
+              <button onClick={handleHelpClick} className="mt-2 px-2 py-1 bg-black dark:bg-white text-white dark:text-black rounded text-sm">
+                Close
+              </button>
+            </div>
+          )}
+          <Item icon={LogOut} label="Exit Notion" />
+          <div className="mt-44 flex flex-col items-center">
+            <div className="-mb-2 text-xs text-center mr-2">Notion by</div>
+            <Image
+              src="/image/logo.png" // Path to the logo image
+              alt="Logo"
+              width={150} // Set appropriate width
+              height={150} // Set appropriate height
+            />
+          </div>
         </div>
         <div
           onMouseDown={handleMouseDown}
