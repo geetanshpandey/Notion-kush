@@ -73,7 +73,7 @@ export const Publish = ({ initialData }: PublishProps) => {
         <Button
           size="sm"
           variant="ghost"
-          className="bg-black text-white dark:bg-white dark:text-black" // Adjusted button color
+          className="bg-black text-white dark:bg-white dark:text-black -mt-4" // Adjusted button color
         >
           <div>Publish</div>
           {initialData.isPublished && (

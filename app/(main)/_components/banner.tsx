@@ -44,25 +44,27 @@ export const Banner = ({
   };
 
   return (
-    <div >
-      <p>
-        This page is in the Trash.
-      </p>
-      <Button
-        size="sm"
-        onClick={onRestore}
-        variant="outline"
-      >
-        Restore page
-      </Button>
-      <ConfirmModal onConfirm={onRemove}>
+    <div className="w-full bg-gray-200 font-bold text-center text-sm p-4 text-black flex flex-col items-center gap-y-2 h-22">
+      <p>This page is in the Trash.</p>
+      <div className="flex space-x-4">
         <Button
           size="sm"
-          variant="outline"
+          onClick={onRestore}
+          variant="default"
+          className="border-white text-white bg-gray-900 hover:bg-emerald-400 px-4 py-2 font-semibold rounded-md"
         >
-          Delete forever
+          Restore page
         </Button>
-      </ConfirmModal>
+        <ConfirmModal onConfirm={onRemove}>
+          <Button
+            size="sm"
+            variant="destructive"
+            className="border-white text-white bg-gray-900 hover:bg-rose-400 px-4 py-2 font-semibold rounded-md"
+          >
+            Delete forever
+          </Button>
+        </ConfirmModal>
+      </div>
     </div>
-  )
-}
+  );
+};
